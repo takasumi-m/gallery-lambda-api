@@ -1,0 +1,2 @@
+# gallery-lambda-api
+ギャラリーサイトのAPI
