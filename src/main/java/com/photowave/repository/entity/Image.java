@@ -1,14 +1,14 @@
 package com.photowave.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "image")
 public class Image {
 
@@ -25,5 +25,4 @@ public class Image {
 
     @Column(name = "original_filename", nullable = false)
     private String originalFilename;
-
 }

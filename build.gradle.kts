@@ -46,9 +46,6 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // spring-boot-starter-web
-    implementation("org.springframework.boot:spring-boot-starter-web")
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -1,14 +1,14 @@
 package com.photowave.repository.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import jakarta.persistence.*;
 
 @Getter
 @Setter
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "post_tags")
 @IdClass(PostTagsId.class)
 public class PostTags {
