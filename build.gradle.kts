@@ -22,7 +22,7 @@ repositories {
 dependencies {
 
     // MySQL ドライバ
-    implementation("mysql:mysql-connector-java:8.0.35")
+    implementation("mysql:mysql-connector-java:8.0.33")
 
     // This dependency is used by the application.
     implementation(libs.guava)
@@ -45,6 +45,9 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // spring-boot-starter-web
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
 }
 
