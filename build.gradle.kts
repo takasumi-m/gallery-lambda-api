@@ -46,6 +46,9 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    // AWS SDK for Java
+    implementation("software.amazon.awssdk:s3:2.28.16")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -63,4 +66,7 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    args = listOf("--spring.profiles.active=dev")
 }

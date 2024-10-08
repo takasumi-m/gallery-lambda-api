@@ -1,6 +1,5 @@
 package com.photowave.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.photowave.controller.request.CreatePostRequest;
 import com.photowave.controller.response.CreatePostResponse;
@@ -28,7 +27,7 @@ public class CreatePostController {
     @PostMapping("/api/post")
     @Transactional(rollbackFor = Exception.class)
     public CreatePostResponse createPost(@RequestPart String requestJson,
-                                         @RequestPart List<MultipartFile> fileList) throws JsonProcessingException {
+                                         @RequestPart List<MultipartFile> fileList) throws Exception {
 
         // JSONデータをパースする
         ObjectMapper objectMapper = new ObjectMapper();
@@ -37,11 +36,19 @@ public class CreatePostController {
         // 現在日時を取得
         LocalDateTime postDateTime = LocalDateTime.now();
 
-        // S3へアップロード
-        List<Image> imageList = createPostService.uploadFile(fileList, postDateTime);
+        try {
 
-        // DBへ登録
-        PostDetails postDetail = createPostService.registerPost(request, imageList, postDateTime);
+            // S3へアップロード
+            List<Image> uploadedImageList = createPostService.uploadFile(fileList, postDateTime);
+
+            // DBへ登録
+            PostDetails postDetail = createPostService.registerPost(request, uploadedImageList, postDateTime);
+
+        } catch (Exception e) {
+            // TODO ploadedImageListのファイルを削除
+            logger.error("Failed to create post", e);
+            throw e;
+        }
 
         return null;
     }

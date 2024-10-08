@@ -1,5 +1,6 @@
 package com.photowave.service;
 
+import com.photowave.config.PhotowaveProperties;
 import com.photowave.controller.request.CreatePostRequest;
 import com.photowave.repository.*;
 import com.photowave.repository.entity.*;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,18 +35,33 @@ public class CreatePostService {
     private TagRepository tagRepository;
     @Autowired
     private PostTagsRepository postTagsRepository;
+    @Autowired
+    private S3Service s3Service;
 
-    public List<Image> uploadFile(List<MultipartFile> fileList, LocalDateTime uploadDateTime) {
+    @Autowired
+    private final PhotowaveProperties pwProperties;
+
+    public CreatePostService(PhotowaveProperties pwProperties) {
+        this.pwProperties = pwProperties;
+    }
+
+    public List<Image> uploadFile(List<MultipartFile> fileList, LocalDateTime uploadDateTime) throws IOException {
         logger.info("uploadFile start");
+
+        // yyyyMMdd形式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
         List<Image> imageList = new ArrayList<>();
         for (MultipartFile file : fileList) {
             Image image = Image.builder()
-                    .filePath(uploadDateTime.getYear() + "/" + uploadDateTime.getMonthValue() + "/" + uploadDateTime.getDayOfMonth())
+                    .filePath(uploadDateTime.format(formatter))
                     .uniqueFilename(UniqueFilenameGenerator.generateUniqueFilename(file.getOriginalFilename(), uploadDateTime))
                     .originalFilename(file.getOriginalFilename())
                     .build();
             imageList.add(image);
+
+            // S3 upload
+            s3Service.uploadFile(pwProperties.getBucketName(), image.getFilePath(), image.getUniqueFilename(), file);
         }
 
         logger.info("uploadFile end");
