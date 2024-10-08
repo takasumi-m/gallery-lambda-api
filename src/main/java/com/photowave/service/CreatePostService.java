@@ -44,15 +44,15 @@ public class CreatePostService {
         this.pwProperties = pwProperties;
     }
 
-    public void uploadFile(List<Image> uploadedList, List<MultipartFile> fileList, LocalDateTime uploadDateTime) throws IOException {
+    public void uploadFile(List<Image> uploadedList, List<MultipartFile> fileList, LocalDateTime postDateTime) throws IOException {
         logger.info("uploadFile start");
 
         for (MultipartFile file : fileList) {
             Image image = Image.builder()
-                    .filePath(uploadDateTime.getYear()
-                            + "/" + String.format("%02d", uploadDateTime.getMonthValue())
-                            + "/" + String.format("%02d", uploadDateTime.getDayOfMonth()))
-                    .uniqueFilename(UniqueFilenameGenerator.generateUniqueFilename(file.getOriginalFilename(), uploadDateTime))
+                    .filePath(postDateTime.getYear()
+                            + "/" + String.format("%02d", postDateTime.getMonthValue())
+                            + "/" + String.format("%02d", postDateTime.getDayOfMonth()))
+                    .uniqueFilename(UniqueFilenameGenerator.generateUniqueFilename(file.getOriginalFilename(), postDateTime))
                     .originalFilename(file.getOriginalFilename())
                     .build();
 
@@ -66,14 +66,14 @@ public class CreatePostService {
         logger.info("uploadFile end");
     }
 
-    public PostDetails registerPost(CreatePostRequest request, List<Image> imageList, LocalDateTime uploadDateTime) {
+    public PostDetails registerPost(CreatePostRequest request, List<Image> imageList, LocalDateTime postDateTime) {
 
         logger.info("registerPost start");
 
         PostDetails postDetails = new PostDetails();
 
         // post table
-        Post post = convertRequestToPost(request, uploadDateTime);
+        Post post = convertRequestToPost(request, postDateTime);
         Post savedPost = postRepository.save(post);
         postDetails.setPost(savedPost);
 
@@ -144,13 +144,13 @@ public class CreatePostService {
         logger.info("deleteFile end");
     }
 
-    private Post convertRequestToPost(CreatePostRequest request, LocalDateTime uploadDateTime) {
+    private Post convertRequestToPost(CreatePostRequest request, LocalDateTime postDateTime) {
         return Post.builder()
                 .status("enabled")
                 .caption(request.getCaption())
                 .location(request.getLocation())
-                .uploadDate(uploadDateTime.toLocalDate())
-                .uploadDatetime(uploadDateTime)
+                .postDate(postDateTime.toLocalDate())
+                .postDatetime(postDateTime)
                 .deletePassword(request.getDeletePassword())
                 .build();
     }

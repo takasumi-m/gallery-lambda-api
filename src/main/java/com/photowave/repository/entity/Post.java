@@ -28,11 +28,11 @@ public class Post {
     @Column(name = "location")
     private String location;
 
-    @Column(name = "upload_date", nullable = false)
-    private LocalDate uploadDate;
+    @Column(name = "post_date", nullable = false)
+    private LocalDate postDate;
 
-    @Column(name = "upload_datetime", nullable = false)
-    private LocalDateTime uploadDatetime;
+    @Column(name = "post_datetime", nullable = false)
+    private LocalDateTime postDatetime;
 
     @Column(name = "delete_password", nullable = false)
     private String deletePassword;
