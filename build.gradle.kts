@@ -49,6 +49,9 @@ dependencies {
     // AWS SDK for Java
     implementation("software.amazon.awssdk:s3:2.28.16")
 
+    // Jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.1")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

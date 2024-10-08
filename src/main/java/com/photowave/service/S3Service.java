@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -42,5 +43,13 @@ public class S3Service {
         s3Config.s3Client().putObject(putObjectRequest, requestBody);
 
         logger.info("uploadFile end");
+    }
+
+    public void deleteFile(String bucketName, String s3Filepath , String s3filename) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(s3Filepath + "/" + s3filename)
+                .build();
+        s3Config.s3Client().deleteObject(deleteObjectRequest);
     }
 }

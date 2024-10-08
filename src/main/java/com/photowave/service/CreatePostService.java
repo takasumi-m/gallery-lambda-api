@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,28 +44,26 @@ public class CreatePostService {
         this.pwProperties = pwProperties;
     }
 
-    public List<Image> uploadFile(List<MultipartFile> fileList, LocalDateTime uploadDateTime) throws IOException {
+    public void uploadFile(List<Image> uploadedList, List<MultipartFile> fileList, LocalDateTime uploadDateTime) throws IOException {
         logger.info("uploadFile start");
 
-        // yyyyMMdd形式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-
-        List<Image> imageList = new ArrayList<>();
         for (MultipartFile file : fileList) {
             Image image = Image.builder()
-                    .filePath(uploadDateTime.format(formatter))
+                    .filePath(uploadDateTime.getYear()
+                            + "/" + String.format("%02d", uploadDateTime.getMonthValue())
+                            + "/" + String.format("%02d", uploadDateTime.getDayOfMonth()))
                     .uniqueFilename(UniqueFilenameGenerator.generateUniqueFilename(file.getOriginalFilename(), uploadDateTime))
                     .originalFilename(file.getOriginalFilename())
                     .build();
-            imageList.add(image);
 
             // S3 upload
             s3Service.uploadFile(pwProperties.getBucketName(), image.getFilePath(), image.getUniqueFilename(), file);
+
+            // uploadしたファイルをリストに追加
+            uploadedList.add(image);
         }
 
         logger.info("uploadFile end");
-
-        return imageList;
     }
 
     public PostDetails registerPost(CreatePostRequest request, List<Image> imageList, LocalDateTime uploadDateTime) {
@@ -131,6 +128,20 @@ public class CreatePostService {
         logger.info("registerPost end");
 
         return postDetails;
+    }
+
+    public void deleteFile(List<Image> imageList){
+        logger.info("deleteFile start");
+
+        logger.info("delete image_id={}",
+                imageList.stream().map(Image::getImageId).map(String::valueOf).collect(Collectors.joining(",")));
+
+        for (Image image : imageList) {
+            // S3 upload
+            s3Service.deleteFile(pwProperties.getBucketName(), image.getFilePath(), image.getUniqueFilename());
+        }
+
+        logger.info("deleteFile end");
     }
 
     private Post convertRequestToPost(CreatePostRequest request, LocalDateTime uploadDateTime) {
