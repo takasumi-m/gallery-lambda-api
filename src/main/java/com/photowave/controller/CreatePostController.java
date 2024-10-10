@@ -32,6 +32,8 @@ public class CreatePostController {
     public ResponseEntity<CreatePostResponse> createPost(@RequestPart String requestJson,
                                                         @RequestPart List<MultipartFile> fileList) throws Exception {
 
+        CreatePostResponse response = new CreatePostResponse();
+
         // JSONデータをパースする
         ObjectMapper objectMapper = new ObjectMapper();
         CreatePostRequest request = objectMapper.readValue(requestJson, CreatePostRequest.class);
@@ -57,9 +59,11 @@ public class CreatePostController {
             // uploadFileでアップロードしたファイルを削除
             createPostService.deleteFile(uploadedImageList);
 
-            return new ResponseEntity<>(new CreatePostResponse(null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(new CreatePostResponse(postDetail.getPost().getPostId()), HttpStatus.CREATED);
+        response.setPostId(postDetail.getPost().getPostId());
+        response.setPostDatetime(postDetail.getPost().getPostDatetime());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
