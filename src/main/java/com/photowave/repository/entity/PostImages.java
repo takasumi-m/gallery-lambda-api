@@ -28,7 +28,7 @@ public class PostImages {
     @JoinColumn(name = "post_id", insertable = false, updatable = false)
     private Post post;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "image_id", insertable = false, updatable = false)
     private Image image;
 }

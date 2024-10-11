@@ -4,6 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,4 +37,10 @@ public class Post {
 
     @Column(name = "delete_password", nullable = false)
     private String deletePassword;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostImages> postImages;
+
+    @OneToMany(mappedBy = "post")
+    private List<PostTags> postTags;
 }
