@@ -25,7 +25,6 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
-
         CriteriaQuery<SearchPostsEntity> query = cb.createQuery(SearchPostsEntity.class);
 
         // FROM
@@ -89,8 +88,8 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
         // ORDER BY
         query.orderBy(cb.desc(post.get("postDatetime")));
 
-        // クエリの実行
-        TypedQuery<SearchPostsEntity> typedQuery = entityManager.createQuery(query);
+        // クエリの実行(LIMIT指定)
+        TypedQuery<SearchPostsEntity> typedQuery = entityManager.createQuery(query).setMaxResults(100);
         return typedQuery.getResultList();
     }
 }

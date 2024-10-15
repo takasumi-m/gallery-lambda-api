@@ -24,10 +24,10 @@ public class GetPostsController {
     public ResponseEntity<List<GetPostsResponse>> getPosts(
             @RequestParam(required = false) String caption,
             @RequestParam(required = false) String location,
+            @RequestParam(required = false) LocalDate postDate,
             @RequestParam(required = false) LocalDateTime postDatetime,
-            @RequestParam(required = false) List<String> tagList) throws Exception {
+            @RequestParam(required = false) List<String> tagList) {
 
-        LocalDate postDate = null;
         // DateTime型からLocalDate型を取得
         if(!Objects.isNull(postDatetime)) {
             postDate = postDatetime.toLocalDate();
