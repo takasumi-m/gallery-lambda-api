@@ -18,8 +18,4 @@ public class SearchPostsEntity {
     String location;
     LocalDate postDate;
     LocalDateTime postDatetime;
-    Integer imageOrder;
-    String filePath;
-    String uniqueFilename;
-    String originalFilename;
 }

@@ -20,7 +20,4 @@ public class GetPostsResponse {
     LocalDate postDate;
     LocalDateTime postDatetime;
     List<String> tagList;
-    Integer imageOrder;
-    String uniqueFilename;
-    String originalFilename;
 }

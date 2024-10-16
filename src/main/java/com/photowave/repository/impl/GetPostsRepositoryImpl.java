@@ -30,29 +30,19 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
         // FROM
         Root<Post> post = query.from(Post.class);
 
-        // JOIN
-        Join<Post, PostImages> postImages = post.join("postImages", JoinType.INNER);
-        Join<PostImages, Image> image = postImages.join("image", JoinType.INNER);
-
         // SELECT
         query.select(cb.construct(SearchPostsEntity.class,
                 post.get("postId"),
                 post.get("caption"),
                 post.get("location"),
                 post.get("postDate"),
-                post.get("postDatetime"),
-                postImages.get("imageOrder"),
-                image.get("filePath"),
-                image.get("uniqueFilename"),
-                image.get("originalFilename")
+                post.get("postDatetime")
         ));
 
         // WHERE
         List<Predicate> predicates = new ArrayList<>();
         // status
         predicates.add(cb.equal(post.get("status"), "enabled"));
-        // image_order
-        predicates.add(cb.equal(postImages.get("imageOrder"), 0));
         // caption
         if (!Objects.isNull(caption) && !caption.isEmpty()) {
             predicates.add(cb.like(post.get("caption"), "%" + caption + "%"));

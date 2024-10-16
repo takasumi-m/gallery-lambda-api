@@ -26,9 +26,6 @@ public class GetPostsService {
     private TagRepository tagRepository;
 
     @Autowired
-    private S3Service s3Service;
-
-    @Autowired
     private final PhotowaveProperties pwProperties;
 
     public GetPostsService(PhotowaveProperties pwProperties) {
@@ -37,6 +34,9 @@ public class GetPostsService {
 
     public List<GetPostsResponse> getPosts(String caption, String location, LocalDate postDate,
                                                 LocalDateTime postDatetime, List<String> tagList) {
+
+        logger.info("getPosts start");
+        logger.info("caption:{} location:{} postDate:{} postDatetime:{} tagList:{}", caption, location, postDate, postDatetime, tagList);
 
         List<GetPostsResponse> responseList = new ArrayList<>();
 
@@ -49,14 +49,14 @@ public class GetPostsService {
             response.setLocation(post.getLocation());
             response.setPostDate(post.getPostDate());
             response.setPostDatetime(post.getPostDatetime());
-            response.setImageOrder(post.getImageOrder());
-            response.setUniqueFilename(post.getUniqueFilename());
-            response.setOriginalFilename(post.getOriginalFilename());
-            responseList.add(response);
 
             // tagの取得
             response.setTagList(tagRepository.findTagNamesByPostId(post.getPostId()));
+
+            responseList.add(response);
         }
+
+        logger.info("getPosts end");
 
         return responseList;
     }

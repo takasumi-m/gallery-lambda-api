@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,17 +27,15 @@ public class GetPostsController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) LocalDate postDate,
             @RequestParam(required = false) LocalDateTime postDatetime,
-            @RequestParam(required = false) List<String> tagList) {
+            @RequestParam(required = false) List<String> tagList) throws IOException {
 
-        // DateTime型からLocalDate型を取得
-        if(!Objects.isNull(postDatetime)) {
+        // postDatetimeからpostDateを取得
+        if(Objects.isNull(postDate) && Objects.nonNull(postDatetime)) {
             postDate = postDatetime.toLocalDate();
         }
 
         // response
         List<GetPostsResponse> response = getPostsService.getPosts(caption, location, postDate, postDatetime, tagList);
-
-        // S3から画像を取得
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
