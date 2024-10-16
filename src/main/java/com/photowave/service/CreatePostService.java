@@ -8,7 +8,6 @@ import com.photowave.service.dto.PostDetails;
 import com.photowave.utils.UniqueFilenameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,24 +22,21 @@ import java.util.stream.Collectors;
 public class CreatePostService {
 
     private static final Logger logger = LoggerFactory.getLogger(CreatePostService.class);
-
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private ImageRepository imageRepository;
-    @Autowired
-    private PostImagesRepository postImagesRepository;
-    @Autowired
-    private TagRepository tagRepository;
-    @Autowired
-    private PostTagsRepository postTagsRepository;
-    @Autowired
-    private S3Service s3Service;
-
-    @Autowired
+    private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
+    private final PostImagesRepository postImagesRepository;
+    private final TagRepository tagRepository;
+    private final PostTagsRepository postTagsRepository;
+    private final S3Service s3Service;
     private final PhotowaveProperties pwProperties;
 
-    public CreatePostService(PhotowaveProperties pwProperties) {
+    public CreatePostService(PostRepository postRepository, ImageRepository imageRepository, PostImagesRepository postImagesRepository, TagRepository tagRepository, PostTagsRepository postTagsRepository, S3Service s3Service, PhotowaveProperties pwProperties) {
+        this.postRepository = postRepository;
+        this.imageRepository = imageRepository;
+        this.postImagesRepository = postImagesRepository;
+        this.tagRepository = tagRepository;
+        this.postTagsRepository = postTagsRepository;
+        this.s3Service = s3Service;
         this.pwProperties = pwProperties;
     }
 

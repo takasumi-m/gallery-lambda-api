@@ -8,7 +8,6 @@ import com.photowave.service.CreatePostService;
 import com.photowave.service.dto.PostDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +23,11 @@ public class CreatePostController {
 
     private static final Logger logger = LoggerFactory.getLogger(CreatePostController.class);
 
-    @Autowired
-    private CreatePostService createPostService;
+    private final CreatePostService createPostService;
+
+    public CreatePostController(CreatePostService createPostService) {
+        this.createPostService = createPostService;
+    }
 
     @PostMapping(value = "/api/post", produces = "application/json")
     @Transactional(rollbackFor = Exception.class)
@@ -33,8 +35,7 @@ public class CreatePostController {
                                                         @RequestPart List<MultipartFile> fileList) throws Exception {
 
         // JSONデータをパースする
-        ObjectMapper objectMapper = new ObjectMapper();
-        CreatePostRequest request = objectMapper.readValue(requestJson, CreatePostRequest.class);
+        CreatePostRequest request = new ObjectMapper().readValue(requestJson, CreatePostRequest.class);
 
         // 現在日時を取得
         LocalDateTime postDateTime = LocalDateTime.now();
@@ -44,7 +45,6 @@ public class CreatePostController {
         // 投稿情報を保持
         PostDetails postDetail = new PostDetails();
         try {
-
             // S3へアップロード（例外時にも値を返却して欲しいため、引数としてuploadedImageList渡す）
             createPostService.uploadFile(uploadedImageList, fileList, postDateTime);
 
@@ -60,9 +60,8 @@ public class CreatePostController {
             return new ResponseEntity<>(new CreatePostResponse(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        CreatePostResponse response = new CreatePostResponse();
-        response.setPostId(postDetail.getPost().getPostId());
-        response.setPostDatetime(postDetail.getPost().getPostDatetime());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        CreatePostResponse response = new CreatePostResponse(postDetail.getPost().getPostId(), postDetail.getPost().getPostDatetime());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 }

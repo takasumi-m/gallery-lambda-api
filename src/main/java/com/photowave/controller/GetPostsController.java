@@ -2,7 +2,6 @@ package com.photowave.controller;
 
 import com.photowave.controller.response.GetPostsResponse;
 import com.photowave.service.GetPostsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ public class GetPostsController {
 
     GetPostsService getPostsService;
 
-    @Autowired
     public GetPostsController(GetPostsService getPostsService) {
         this.getPostsService = getPostsService;
     }
@@ -40,6 +38,7 @@ public class GetPostsController {
         // response
         List<GetPostsResponse> response = getPostsService.getPosts(caption, location, postDate, postDatetime, tagList);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(response);
     }
 }

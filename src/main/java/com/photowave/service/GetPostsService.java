@@ -16,7 +16,6 @@ import java.util.List;
 public class GetPostsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetPostsService.class);
-
     private final GetPostsRepository getPostsRepository;
     private final TagRepository tagRepository;
 

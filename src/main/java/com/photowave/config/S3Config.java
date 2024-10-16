@@ -1,6 +1,5 @@
 package com.photowave.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -13,7 +12,6 @@ public class S3Config {
 
     private final AwsProperties awsProperties;
 
-    @Autowired
     public S3Config(AwsProperties awsProperties) {
         this.awsProperties = awsProperties;
     }
