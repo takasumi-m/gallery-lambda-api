@@ -12,4 +12,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "photowave")
 public class PhotowaveProperties {
     private String bucketName;
+    private String localDownloadPath;
 }

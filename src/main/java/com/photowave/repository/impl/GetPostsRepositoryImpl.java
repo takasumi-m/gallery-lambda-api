@@ -76,7 +76,7 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
         query.where(cb.and(predicates.toArray(new Predicate[0])));
 
         // ORDER BY
-        query.orderBy(cb.desc(post.get("postDatetime")));
+        query.orderBy(cb.asc(post.get("postDatetime")));
 
         // クエリの実行(LIMIT指定)
         TypedQuery<SearchPostsEntity> typedQuery = entityManager.createQuery(query).setMaxResults(50);
