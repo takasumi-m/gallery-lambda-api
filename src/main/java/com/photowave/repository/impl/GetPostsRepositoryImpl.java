@@ -79,7 +79,7 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
         query.orderBy(cb.desc(post.get("postDatetime")));
 
         // クエリの実行(LIMIT指定)
-        TypedQuery<SearchPostsEntity> typedQuery = entityManager.createQuery(query).setMaxResults(100);
+        TypedQuery<SearchPostsEntity> typedQuery = entityManager.createQuery(query).setMaxResults(50);
         return typedQuery.getResultList();
     }
 }

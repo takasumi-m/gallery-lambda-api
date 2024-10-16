@@ -1,12 +1,10 @@
 package com.photowave.service;
 
-import com.photowave.config.PhotowaveProperties;
 import com.photowave.controller.response.GetPostsResponse;
 import com.photowave.repository.*;
 import com.photowave.repository.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,17 +17,13 @@ public class GetPostsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetPostsService.class);
 
-    @Autowired
-    private GetPostsRepository getPostsRepository;
+    private final GetPostsRepository getPostsRepository;
+    private final TagRepository tagRepository;
 
-    @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
-    private final PhotowaveProperties pwProperties;
-
-    public GetPostsService(PhotowaveProperties pwProperties) {
-        this.pwProperties = pwProperties;
+    public GetPostsService(GetPostsRepository getPostsRepository,
+                           TagRepository tagRepository) {
+        this.getPostsRepository = getPostsRepository;
+        this.tagRepository = tagRepository;
     }
 
     public List<GetPostsResponse> getPosts(String caption, String location, LocalDate postDate,

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,8 +17,12 @@ import java.util.Objects;
 @RestController
 public class GetPostsController {
 
-    @Autowired
     GetPostsService getPostsService;
+
+    @Autowired
+    public GetPostsController(GetPostsService getPostsService) {
+        this.getPostsService = getPostsService;
+    }
 
     @GetMapping(value = "/api/posts", produces = "application/json")
     public ResponseEntity<List<GetPostsResponse>> getPosts(
@@ -27,7 +30,7 @@ public class GetPostsController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) LocalDate postDate,
             @RequestParam(required = false) LocalDateTime postDatetime,
-            @RequestParam(required = false) List<String> tagList) throws IOException {
+            @RequestParam(required = false) List<String> tagList) {
 
         // postDatetimeからpostDateを取得
         if(Objects.isNull(postDate) && Objects.nonNull(postDatetime)) {
