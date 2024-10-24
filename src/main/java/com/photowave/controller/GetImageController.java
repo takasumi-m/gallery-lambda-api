@@ -29,8 +29,7 @@ public class GetImageController {
 
         // ZIPファイルが存在しない場合の処理
         if (zipFile == null || !zipFile.exists()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null);  // 404 Not Found を返す
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
         // ファイルを Resource に変換

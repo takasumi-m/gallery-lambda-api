@@ -39,7 +39,7 @@ public class GetImageService {
         // ファイルが存在しない場合
         if (ImageList.isEmpty()) {
             logger.error("ファイルが存在しません。");
-            throw new RuntimeException("ファイルが存在しません。");
+            return null;
         }
 
         // ローカルのダウンロード先ディレクトリ
