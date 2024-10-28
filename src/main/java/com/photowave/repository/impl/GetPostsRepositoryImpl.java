@@ -57,7 +57,7 @@ public class GetPostsRepositoryImpl implements GetPostsRepository {
         }
         // postDatetime
         if (!Objects.isNull(postDatetime)) {
-            predicates.add(cb.lessThanOrEqualTo(post.get("postDatetime"), postDatetime));
+            predicates.add(cb.lessThan(post.get("postDatetime"), postDatetime));
         }
         // tagList
         if (!Objects.isNull(tagList) && !tagList.isEmpty()) {
